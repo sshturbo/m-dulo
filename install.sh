@@ -84,10 +84,6 @@ if [ -d "/opt/myapp/" ]; then
     echo "Instalando dependências do package.json..."
     npm install --prefix /opt/myapp/
 
-    # Executar build
-    echo "Executando npm run build..."
-    npm run build --prefix /opt/myapp/
-
     # Iniciar o serviço
     npm start --prefix /opt/myapp/
     
