@@ -4,12 +4,21 @@
 print_centered() {
     term_width=$(tput cols)
     text="$1"
-    printf "%*s\n" $(((${#text} + term_width) / 2)) "$text"
+    padding=$(( (term_width - ${#text}) / 2 ))
+    printf "%${padding}s" '' # Adiciona espaços antes do texto
+    echo -e "$text"
 }
 
-# Cor azul escura
-BLUE="\033[0;34m"
-NC="\033[0m" # Sem cor
+# Verifica se o terminal suporta cores
+if tput setaf 1 &> /dev/null; then
+    # Cor azul escura
+    BLUE="\033[0;34m"
+    NC="\033[0m" # Sem cor
+else
+    # Desativa as cores se o terminal não suportar
+    BLUE=""
+    NC=""
+fi
 
 print_centered "${BLUE}Iniciando o processo de instalação...${NC}"
 
