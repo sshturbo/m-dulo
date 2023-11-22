@@ -34,7 +34,7 @@ fi
 # Verificando e instalando o PM2 se necessário
 if ! command -v pm2 > /dev/null 2>&1; then
     echo "PM2 não está instalado. Instalando..."
-    sudo npm install pm2@latest -g
+    sudo npm install -g pm2
 else
     echo "PM2 já está instalado."
 fi
