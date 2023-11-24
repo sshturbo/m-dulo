@@ -31,7 +31,8 @@ current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
 if ! command -v node > /dev/null 2>&1 || [ "$current_version" -le 8 ]; then
     print_centered "Node.js não está instalado ou a versão é <= 8. Instalando a versão 14..."
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
-    exec bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
     nvm install 14 &>/dev/null
     nvm use 14
     nvm alias default 14
