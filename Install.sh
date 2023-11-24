@@ -31,8 +31,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
 
-# Verificando a versão do Node.js e instalando o NVM se necessário
-if ! command -v nvm > /dev/null 2>&1; then
+# Verificar a existência do NVM
+if [ ! -f "$NVM_DIR/nvm.sh" ]; then
     print_centered "NVM não está instalado. Instalando o NVM..."
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
     print_centered "NVM instalado. Por favor, feche e reabra o terminal, e execute este script novamente para continuar a instalação do Node.js."
