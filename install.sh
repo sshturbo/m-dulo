@@ -26,9 +26,10 @@ print_centered "Atualizando pacotes..."
 sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
 progress_bar 5
 
-# Verificando e instalando o Node.js se necessário
-if ! command -v node > /dev/null 2>&1; then
-    print_centered "Node.js não está instalado. Instalando..."
+# Verificando a versão do Node.js e instalando se necessário
+current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
+if ! command -v node > /dev/null 2>&1 || [ "$current_version" -le 8 ]; then
+    print_centered "Node.js não está instalado ou a versão é <= 8. Instalando a versão 14..."
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
     exec bash
     nvm install 14 &>/dev/null
@@ -36,8 +37,9 @@ if ! command -v node > /dev/null 2>&1; then
     nvm alias default 14
     progress_bar 10
 else
-    print_centered "Node.js já está instalado."
+    print_centered "Node.js já está instalado e a versão é maior que 8."
 fi
+
 
 # Verificando e instalando o npm se necessário
 if ! command -v npm > /dev/null 2>&1; then
