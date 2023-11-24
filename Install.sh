@@ -26,6 +26,11 @@ print_centered "Atualizando pacotes..."
 sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
 progress_bar 5
 
+# Carregar NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
+
 # Verificando a versão do Node.js e instalando o NVM se necessário
 if ! command -v nvm > /dev/null 2>&1; then
     print_centered "NVM não está instalado. Instalando o NVM..."
