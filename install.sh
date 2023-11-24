@@ -29,10 +29,11 @@ progress_bar 5
 # Verificando e instalando o Node.js se necessário
 if ! command -v node > /dev/null 2>&1; then
     print_centered "Node.js não está instalado. Instalando..."
-    wget https://raw.githubusercontent.com/sshturbo/m-dulo/main/nodesource_setup.sh -O nodesource_setup.sh &>/dev/null
-    chmod +x nodesource_setup.sh
-    sudo ./nodesource_setup.sh &>/dev/null
-    sudo apt-get install -y nodejs &>/dev/null
+    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
+    exec bash
+    nvm install 14 &>/dev/null
+    nvm use 14
+    nvm alias default 14
     progress_bar 10
 else
     print_centered "Node.js já está instalado."
