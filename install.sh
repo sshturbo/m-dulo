@@ -35,8 +35,9 @@ export NVM_DIR="$HOME/.nvm"
 if [ ! -f "$NVM_DIR/nvm.sh" ]; then
     print_centered "NVM não está instalado. Instalando o NVM..."
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
-    print_centered "NVM instalado. Por favor, feche e reabra o terminal, e execute este script novamente para continuar a instalação do Node.js."
-    exit 0
+    print_centered "NVM instalado. Por favor, execute este script novamente para continuar a instalação do Node.js."
+    exec bash
+    # Após esta linha, o script não continuará, pois o shell foi substituído.
 fi
 
 # Continuação para instalação do Node.js
