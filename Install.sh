@@ -26,17 +26,23 @@ print_centered "Atualizando pacotes..."
 sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
 progress_bar 5
 
-# Verificando a versão do Node.js e instalando se necessário
-current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
-if ! command -v node > /dev/null 2>&1 || [ "$current_version" -le 8 ]; then
-    print_centered "Node.js não está instalado ou a versão é <= 8. Instalando a versão 14..."
+# Verificando a versão do Node.js e instalando o NVM se necessário
+if ! command -v nvm > /dev/null 2>&1; then
+    print_centered "NVM não está instalado. Instalando o NVM..."
     wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
+    print_centered "NVM instalado. Por favor, feche e reabra o terminal, e execute este script novamente para continuar a instalação do Node.js."
+    exit 0
+fi
+
+# Continuação para instalação do Node.js
+current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
+if [ "$current_version" -le 8 ]; then
+    print_centered "Instalando Node.js versão 14..."
     nvm install 14 &>/dev/null
     nvm use 14
     nvm alias default 14
     progress_bar 10
+    print_centered "Node.js versão 14 instalado com sucesso."
 else
     print_centered "Node.js já está instalado e a versão é maior que 8."
 fi
@@ -63,7 +69,7 @@ fi
 # Verificando e instalando o PM2 se necessário
 if ! command -v pm2 > /dev/null 2>&1; then
     print_centered "PM2 não está instalado. Instalando..."
-    sudo npm install pm2 -g &>/dev/null
+    sudo npm install -g pm2 &>/dev/null
     progress_bar 5
 else
     print_centered "PM2 já está instalado."
