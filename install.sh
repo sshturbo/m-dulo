@@ -44,11 +44,11 @@ fi
 current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
 if [ "$current_version" -le 8 ]; then
     print_centered "Instalando Node.js versão 14..."
-    nvm install 14 &>/dev/null
-    nvm use 14
-    nvm alias default 14
+    nvm install 10 &>/dev/null
+    nvm use 10
+    nvm alias default 10
     progress_bar 10
-    print_centered "Node.js versão 14 instalado com sucesso."
+    print_centered "Node.js versão 10 instalado com sucesso."
 else
     print_centered "Node.js já está instalado e a versão é maior que 8."
 fi
