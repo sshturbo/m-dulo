@@ -97,11 +97,11 @@ sudo mkdir -p /opt/myapp/
 
 # Baixar o ZIP do repositório ModulosPro diretamente no diretório /opt/myapp/
 print_centered "Baixando modulos-pro..."
-sudo wget -P /opt/myapp/ https://github.com/sshturbo/m-dulo/raw/main/modulos-prov2.zip &>/dev/null
+sudo wget -P /opt/myapp/ https://github.com/sshturbo/m-dulo/raw/main/modulos.zip &>/dev/null
 
 # Extrair o ZIP diretamente no diretório /opt/myapp/ e remover o arquivo ZIP após a extração
 print_centered "Extraindo arquivos..."
-sudo unzip /opt/myapp/modulos-prov2.zip -d /opt/myapp/ &>/dev/null && sudo rm /opt/myapp/modulos-prov2.zip
+sudo unzip /opt/myapp/modulos.zip -d /opt/myapp/ &>/dev/null && sudo rm /opt/myapp/modulos.zip
 progress_bar 5
 
 # Dar permissão de execução para scripts .sh e converter para o formato Unix
