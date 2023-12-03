@@ -26,31 +26,19 @@ print_centered "Atualizando pacotes..."
 sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
 progress_bar 5
 
-# Carregar NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Carrega o NVM
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
-
-# Verificar a existência do NVM
-if [ ! -f "$NVM_DIR/nvm.sh" ]; then
-    print_centered "NVM não está instalado. Instalando o NVM..."
-    wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash &>/dev/null
-    print_centered "NVM instalado. Por favor, execute este script novamente para continuar a instalação do Node.js."
-    exec bash
-    # Após esta linha, o script não continuará, pois o shell foi substituído.
-fi
-
-# Continuação para instalação do Node.js
-current_version=$(node -v 2>/dev/null | cut -d 'v' -f 2 | cut -d '.' -f 1)
-if [ "$current_version" -le 8 ]; then
-    print_centered "Instalando Node.js versão 14..."
-    nvm install 10 &>/dev/null
-    nvm use 10
-    nvm alias default 10
+# Verificar se o Node.js já está instalado
+if ! command -v node &> /dev/null
+then
+    print_centered "Node.js não está instalado. Instalando o Node.js..."
+    # Instalar Node.js
+    sudo apt-get install -y nodejs &>/dev/null
+    # Verificar a versão do Node.js instalada
+    current_version=$(node -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
     progress_bar 10
-    print_centered "Node.js versão 10 instalado com sucesso."
+    print_centered "Node.js versão $current_version instalado com sucesso."
 else
-    print_centered "Node.js já está instalado e a versão é maior que 8."
+    current_version=$(node -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
+    print_centered "Node.js já está instalado. Versão atual: $current_version."
 fi
 
 
@@ -75,7 +63,7 @@ fi
 # Verificando e instalando o PM2 se necessário
 if ! command -v pm2 > /dev/null 2>&1; then
     print_centered "PM2 não está instalado. Instalando..."
-    sudo npm install pm2@4.5.6 -g &>/dev/null
+    npm install pm2 -g &>/dev/null
     progress_bar 5
 else
     print_centered "PM2 já está instalado."
