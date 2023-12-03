@@ -36,9 +36,7 @@ check_status() {
 # Atualizando e atualizando os pacotes
 print_centered "Atualizando pacotes..."
 sudo apt update &>/dev/null
-check_status $?
 sudo apt upgrade -y &>/dev/null
-check_status $?
 progress_bar 5
 
 # Verificar se o Node.js já está instalado
