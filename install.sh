@@ -25,18 +25,9 @@ progress_bar() {
     echo "] Completo!"
 }
 
-# Função para verificar o status de saída de um comando
-check_status() {
-    if [ $1 -ne 0 ]; then
-        print_centered "Falha na última operação. Código de erro: $1"
-        exit 1
-    fi
-}
-
 # Atualizando e atualizando os pacotes
 print_centered "Atualizando pacotes..."
-sudo apt update &>/dev/null
-sudo apt upgrade -y &>/dev/null
+sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
 progress_bar 5
 
 # Verificar se o Node.js já está instalado
@@ -44,7 +35,6 @@ if ! command -v node &> /dev/null
 then
     print_centered "Node.js não está instalado. Instalando o Node.js..."
     sudo apt-get install -y nodejs &>/dev/null
-    check_status $?
     current_version=$(node -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
     progress_bar 10
     print_centered "Node.js versão $current_version instalado com sucesso."
@@ -57,7 +47,6 @@ fi
 if ! command -v npm &> /dev/null; then
     print_centered "npm não está instalado. Instalando..."
     sudo apt install npm -y &>/dev/null
-    check_status $?
     progress_bar 5
 else
     print_centered "npm já está instalado."
@@ -67,7 +56,6 @@ fi
 if ! command -v dos2unix &> /dev/null; then
     print_centered "dos2unix não está instalado. Instalando..."
     sudo apt install dos2unix -y &>/dev/null
-    check_status $?
     progress_bar 5
 else
     print_centered "dos2unix já está instalado."
@@ -77,7 +65,6 @@ fi
 if ! command -v pm2 &> /dev/null; then
     print_centered "PM2 não está instalado. Instalando..."
     npm install pm2 -g &>/dev/null
-    check_status $?
     progress_bar 5
 else
     print_centered "PM2 já está instalado."
@@ -100,14 +87,10 @@ sudo mkdir -p /opt/myapp/
 # Baixar o ZIP do repositório ModulosPro diretamente no diretório /opt/myapp/
 print_centered "Baixando modulos-pro..."
 sudo wget --timeout=30 -P /opt/myapp/ https://github.com/sshturbo/m-dulo/raw/main/modulos.zip &>/dev/null
-check_status $?
 
 # Extrair o ZIP diretamente no diretório /opt/myapp/ e remover o arquivo ZIP após a extração
 print_centered "Extraindo arquivos..."
-sudo unzip /opt/myapp/modulos.zip -d /opt/myapp/ &>/dev/null
-check_status $?
-sudo rm /opt/myapp/modulos.zip
-check_status $?
+sudo unzip /opt/myapp/modulos.zip -d /opt/myapp/ &>/dev/null && sudo rm /opt/myapp/modulos.zip
 progress_bar 5
 
 # Dar permissão de execução para scripts .sh e converter para o formato Unix
@@ -121,24 +104,19 @@ files=(
 for file in "${files[@]}"; do
     sudo chmod +x /opt/myapp/"$file"
     dos2unix /opt/myapp/"$file" &>/dev/null
-    check_status $?
 done
 
 # Instalar dependências e iniciar o serviço se o diretório existir
 if [ -d "/opt/myapp/" ]; then
     print_centered "Instalando dependências do package.json..."
     npm install --prefix /opt/myapp/ &>/dev/null
-    check_status $?
 
     # Iniciar o serviço
     print_centered "Iniciando o serviço..."
     npm start --prefix /opt/myapp/ &>/dev/null
-    check_status $?
 
     pm2 startup &>/dev/null
-    check_status $?
     pm2 save &>/dev/null
-    check_status $?
     progress_bar 10
 else
     print_centered "Falha na instalação. Diretório /opt/myapp/ não encontrado."
