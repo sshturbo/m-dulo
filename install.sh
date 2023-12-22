@@ -64,7 +64,7 @@ fi
 # Verificando e instalando o PM2 se necessário
 if ! command -v pm2 &> /dev/null; then
     print_centered "PM2 não está instalado. Instalando..."
-    npm install pm2 -g &>/dev/null
+    npm install pm2@2.6.0 -g &>/dev/null
     progress_bar 5
 else
     print_centered "PM2 já está instalado."
