@@ -42,10 +42,13 @@ def get_connected_users():
     except IOError:  # IOError cobre FileNotFoundError em Python 2 e é suficiente para ambos
         pass
 
+    print("Usuários conectados: " + ', '.join(users))
     return ','.join(users)
 
 def send_users_to_server(user_list, url):
-    requests.post(url, data={'users': user_list})
+    print("Enviando para o URL: " + url)
+    response = requests.post(url, data={'users': user_list})
+    print("Resposta do servidor: " + str(response.status_code))
 
 def start_loop(url):
     while True:
@@ -55,4 +58,5 @@ def start_loop(url):
 
 if __name__ == "__main__":
     url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/"
+    print("Iniciando o loop com a URL: " + url)
     start_loop(url)
