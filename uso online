@@ -1,0 +1,1 @@
+pm2 start start.py --interpreter python --name "online-pro" -- https://exemplo.com/online.php
