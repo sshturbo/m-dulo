@@ -51,5 +51,5 @@ def start_loop(url):
         send_users_to_server(user_list, url)
         time.sleep(3)
 
-url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/online.php"
+url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/"
 start_loop(url)
