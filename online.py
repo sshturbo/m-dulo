@@ -9,8 +9,8 @@ import sys
 try:
     import requests
 except ImportError:
-    # Pode ser necessário instalar 'requests' manualmente em ambientes Python 2
-    raise ImportError("A biblioteca 'requests' é necessária. Instale-a com 'pip install requests'.")
+    print("A biblioteca 'requests' não está instalada. Instale-a com 'pip install requests'.")
+    sys.exit(1)
 
 # Compatibilidade com Python 2 e 3 para 'input' e 'print'
 try:
@@ -53,5 +53,6 @@ def start_loop(url):
         send_users_to_server(user_list, url)
         time.sleep(3)
 
-url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/"
-start_loop(url)
+if __name__ == "__main__":
+    url = sys.argv[1] if len(sys.argv) > 1 else "https://example.com/"
+    start_loop(url)
