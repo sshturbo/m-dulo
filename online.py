@@ -39,7 +39,7 @@ def get_connected_users():
                 match = re.match(r"^[a-zA-Z0-9_-]+,[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+", line)
                 if match:
                     users.add(line.split(',')[0])
-    except (IOError, FileNotFoundError):
+    except IOError:  # IOError cobre FileNotFoundError em Python 2 e é suficiente para ambos
         pass
 
     return ','.join(users)
