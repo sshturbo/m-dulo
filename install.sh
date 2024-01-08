@@ -17,53 +17,51 @@ print_centered() {
 
 # Função para simular uma barra de progresso
 progress_bar() {
+    local total_steps=$1
+    local current_step=0
+
     echo -n "Progresso: ["
-    for i in $(seq 1 $1); do
-        echo -n "###"
-        sleep 1
+    while [ $current_step -lt $total_steps ]; do
+        echo -n "#"
+        ((current_step++))
+        sleep 0.1
     done
     echo "] Completo!"
 }
 
-# Verificar se o Node.js já está instalado
-if ! command -v node &> /dev/null
-then
-    print_centered "Node.js não está instalado. Instalando o Node.js..."
-    sudo apt-get install -y nodejs &>/dev/null
-    current_version=$(node -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
+# Verifica e instala dependências
+DEPENDENCIES=("node" "npm" "dos2unix" "pm2")
+NEED_INSTALL=()
+for dep in "${DEPENDENCIES[@]}"; do
+    if ! command -v $dep &> /dev/null; then
+        NEED_INSTALL+=($dep)
+    else
+        current_version=$($dep -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
+        print_centered "$dep já está instalado. Versão atual: $current_version."
+    fi
+done
+
+# Instala dependências necessárias
+for dep in "${NEED_INSTALL[@]}"; do
+    print_centered "Instalando $dep..."
+    case $dep in
+        node)
+            sudo apt-get install -y nodejs &>/dev/null
+            ;;
+        npm)
+            sudo apt install npm -y &>/dev/null
+            ;;
+        dos2unix)
+            sudo apt install dos2unix -y &>/dev/null
+            ;;
+        pm2)
+            npm install pm2@4.0.1 -g &>/dev/null
+            ;;
+    esac
     progress_bar 10
-    print_centered "Node.js versão $current_version instalado com sucesso."
-else
-    current_version=$(node -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
-    print_centered "Node.js já está instalado. Versão atual: $current_version."
-fi
-
-# Verificando e instalando o npm se necessário
-if ! command -v npm &> /dev/null; then
-    print_centered "npm não está instalado. Instalando..."
-    sudo apt install npm -y &>/dev/null
-    progress_bar 5
-else
-    print_centered "npm já está instalado."
-fi
-
-# Verificando e instalando o dos2unix se necessário
-if ! command -v dos2unix &> /dev/null; then
-    print_centered "dos2unix não está instalado. Instalando..."
-    sudo apt install dos2unix -y &>/dev/null
-    progress_bar 5
-else
-    print_centered "dos2unix já está instalado."
-fi
-
-# Verificando e instalando o PM2 se necessário
-if ! command -v pm2 &> /dev/null; then
-    print_centered "PM2 não está instalado. Instalando..."
-    npm install pm2@4.0.1 -g &>/dev/null
-    progress_bar 5
-else
-    print_centered "PM2 já está instalado."
-fi
+    current_version=$($dep -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
+    print_centered "$dep instalado com sucesso. Versão: $current_version."
+done
 
 # Verifica se o diretório /opt/myapp/ existe
 if [ -d "/opt/myapp/" ]; then
