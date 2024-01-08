@@ -25,11 +25,6 @@ progress_bar() {
     echo "] Completo!"
 }
 
-# Atualizando e atualizando os pacotes
-print_centered "Atualizando pacotes..."
-sudo apt update &>/dev/null && sudo apt upgrade -y &>/dev/null
-progress_bar 5
-
 # Verificar se o Node.js já está instalado
 if ! command -v node &> /dev/null
 then
