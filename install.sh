@@ -36,10 +36,17 @@ for dep in "${DEPENDENCIES[@]}"; do
     if ! command -v $dep &> /dev/null; then
         NEED_INSTALL+=($dep)
     else
-        current_version=$($dep -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
-        print_centered "$dep já está instalado. Versão atual: $current_version."
+        if [ $dep == "dos2unix" ]; then
+            # Para programas sem verificação de versão específica
+            print_centered "$dep já está instalado."
+        else
+            # Para programas com verificação de versão
+            current_version=$($dep -v | cut -d 'v' -f 2 | cut -d '.' -f 1)
+            print_centered "$dep já está instalado. Versão atual: $current_version."
+        fi
     fi
 done
+
 
 # Instala dependências necessárias
 for dep in "${NEED_INSTALL[@]}"; do
